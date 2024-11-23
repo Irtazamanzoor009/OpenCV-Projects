@@ -22,9 +22,10 @@ while True:
         hand = hands[0]
         lmList = hand['lmList']
         cursor = lmList[8]
+        # print(cursor)
         
         l,_,_ = detector.findDistance(lmList[8][0:2],lmList[12][0:2],frame) # lmlist[8][0:2] means 8 is the tip of first finger and in it x,y total are x,y,z print this as a sample lmlist[8][:]
-        print(l)
+        # print(l)
         if l < 40:        
             if cx-w//2 < cursor[0] < cx+w//2 and cy-h//2 < cursor[1] < cy+h//2:
                 colorR = 0, 255, 0
