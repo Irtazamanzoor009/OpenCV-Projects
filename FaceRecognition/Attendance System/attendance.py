@@ -2,6 +2,7 @@ import numpy as np
 import face_recognition
 import cv2 as cv
 import os
+from datetime import datetime
 
 path = "Attendance System/images"
 images = []
@@ -21,6 +22,20 @@ def findEncodings(images):
         encode = face_recognition.face_encodings(img)[0]
         encodeList.append(encode)
     return encodeList
+
+def markAttendance(name):
+    with open("Attendance System/Attendance.csv","r+") as f:
+        myDataList = f.readlines()
+        nameList = []
+        for line in myDataList:
+            entry = line.split(',')
+            nameList.append(entry[0])
+        if name not in nameList:
+            now = datetime.now()
+            dtString = now.strftime('%H:%M:%S')
+            f.writelines(f"\n{name},{dtString}")
+
+
 
 encodeListKnown = findEncodings(images)
 print("Encoding Completed")
@@ -53,6 +68,7 @@ while True:
             cv.rectangle(frame, (x1,y1), (x2,y2), (0,255,0), 2)
             cv.rectangle(frame, (x1, y2-35), (x2,y2), (0,255,0), cv.FILLED)
             cv.putText(frame, name, (x1+6, y2-6), cv.FONT_HERSHEY_COMPLEX, 1, (255,255,255), 2)
+            markAttendance(name)
 
     cv.imshow("Camera", frame)
 
