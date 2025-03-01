@@ -11,12 +11,25 @@ with open("CarParkingPositions","rb") as f:
         posList = pickle.load(f)
 
 def checkParkingSpace(img):
+    spaceCounter = 0
     for pos in posList:
         x,y = pos
 
         imgCrop = img[y:y+height, x:x+width]
         count = cv.countNonZero(imgCrop)
         cvzone.putTextRect(frame, str(count), (x, y+height - 5), scale=1, thickness=2, offset=0)
+
+        if count < 900:
+            color = (0,255,0)
+            thickness = 5
+            spaceCounter +=1
+        else:
+            color = (0,0,255)
+            thickness = 2
+        cv.rectangle(frame, pos, (pos[0]+width, pos[1]+height) , color, thickness)
+
+    cvzone.putTextRect(frame, f"Free: {spaceCounter}/{len(posList)}", (100,50), scale=3, thickness=5, offset=20, colorR= (0,200,0))
+
         # cv.imshow(str(x*y), imgCrop)
 
 while True:
@@ -39,8 +52,8 @@ while True:
     frameDilate = cv.dilate(frameMedian, kernel, iterations=1)
 
     checkParkingSpace(frameDilate)
-    for pos in posList:
-        cv.rectangle(frame, pos, (pos[0]+width, pos[1]+height) , (255,0,255), 2)
+    # for pos in posList:
+        
 
 
     cv.imshow("Car Parking", frame)
