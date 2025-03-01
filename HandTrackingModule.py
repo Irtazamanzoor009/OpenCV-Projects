@@ -48,7 +48,7 @@ def main():
             print("Frame not loaded correctly")
             break
         
-        img = detect.findHands(frame,draw=False)
+        img = detect.findHands(frame,draw=True)
         lmlist = detect.findPosition(img)
         if len(lmlist) != 0:
             print(lmlist[4])
